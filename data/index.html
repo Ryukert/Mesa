@@ -1,0 +1,346 @@
+<!DOCTYPE HTML><html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MesaFI</title>
+  <style>
+    
+  html {
+  font-family: Arial; display: inline-block; text-align: center;
+   font-size: 2.5em; /* 40px/16=2.5em */
+  width: 100%;
+  height:100%;
+  background: linear-gradient(-45deg, #23a6d5, #23d5ab);
+}
+
+
+form {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.value-button {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 10px;
+  width: 40px;
+  height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 11px 0;
+  color: white;
+  background: #000;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.value-button:hover {
+  cursor: pointer;
+}
+
+form #decrease {
+  margin-right: -4px;
+  border-radius: 8px 0 0 8px;
+}
+
+form #increase {
+  margin-left: -4px;
+  border-radius: 0 8px 8px 0;
+}
+
+form #input-wrap {
+  margin: 0px;
+  padding: 0px;
+}
+
+input#number {
+  font-family: Arial; 
+   font-size: 1.5em; 
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  margin: 0px;
+  width: 200px;
+  height: 120px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.resultado {
+    font-size: 1rem;
+    font-family: sans-serif;
+    padding: 1rem 0 2rem 2rem;
+    color: white;
+}
+
+.button {
+  background-color: black; /* Green */
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button1 {border-radius: 4px;}
+
+  </style>
+</head>
+<body>
+  <h2>Mesa Vibradora FI-UAGro</h2>
+
+    <div id="resultado" class="resultado">
+            Modo <span id="status">Automatico</span>
+          </div>
+
+    <label class="switch">
+      <input id="toggleswitch" type="checkbox">
+      <span class="slider round"></span>
+    </label>
+          
+    <!-- Sección para mover motores en modo AUTOMATICO -->
+      <div>
+        
+      <!-- switch de primer motor -->
+          <form>
+            <select id="mySelect">
+              <option value="1">128 mHz</option>
+              <option value="2">64 mHz</option>
+              <option value="3">32 mHz</option>
+              <option value="4">16 mHz</option>
+            </select>
+          </form>
+
+          <button class="button button1" id="boton1" onclick="boton()">Inicia</button>
+          
+      <!-- switch de segundo motor -->
+          <form>
+            <select id="mySelect2">
+              <option value="1">128 mHz</option>
+              <option value="2">64 mHz</option>
+              <option value="3">32 mHz</option>
+              <option value="4">16 mHz</option>
+            </select>
+          </form>
+          
+          <button class="button button1" id="boton2" onclick="boton2()">Inicia</button>
+      
+    </div>
+
+     <!-- Sección para mover motores en modo MANUAL -->
+    <div>
+      <label>
+
+    <!-- Incrementar valores de primer motor -->
+         <form>
+            <div class="value-button" id="decrease" style="display:none" onclick="decreaseValue()" value="Decrease Value">-</div>
+              <input type="number" id="textSliderValue" style="display:none" min="21" max="146" value="21" disabled >
+            <div class="value-button" id="increase" style="display:none" onclick="increaseValue()" value="Increase Value">+</div>
+        </form>
+        
+    <!-- Incrementar valores de segundo motor -->        
+        <form>
+            <div class="value-button" id="decrease2" style="display:none" onclick="decreaseValue2()" value="Decrease Value">-</div>
+              <input type="number" id="textSliderValue2" style="display:none" min="7" max="50" value="7" disabled >
+            <div class="value-button" id="increase2"  style="display:none" onclick="increaseValue2()" value="Increase Value">+</div>
+        </form>
+
+    </div>
+    
+    <script>
+    var input = document.getElementById('toggleswitch');
+    var outputtext = document.getElementById('status');
+
+    var input2 = document.getElementById('toggleswitch2');
+    var outputtext2 = document.getElementById('status2');
+
+    var xhr = new XMLHttpRequest();
+
+    
+    input.addEventListener('change',function(){
+        if(this.checked) {
+            outputtext.innerHTML = "Manual";
+            
+            document.getElementById("increase").style.display = '';
+            document.getElementById("decrease").style.display = '';
+            document.getElementById("increase2").style.display = '';
+            document.getElementById("decrease2").style.display = '';
+            document.getElementById("textSliderValue").style.display = '';
+            document.getElementById("textSliderValue2").style.display = '';
+            
+            document.getElementById("boton1").style.display = 'none';
+            document.getElementById("boton2").style.display = 'none';
+            document.getElementById("mySelect2").style.display = 'none';
+            document.getElementById("mySelect").style.display = 'none';
+
+            
+        } else {
+            outputtext.innerHTML = "Automatico";
+
+            document.getElementById("boton1").style.display = '';
+            document.getElementById("boton2").style.display = '';
+            document.getElementById("mySelect").style.display = '';
+            document.getElementById("mySelect2").style.display = '';
+            
+            document.getElementById("increase").style.display = 'none';
+            document.getElementById("decrease").style.display = 'none';
+            document.getElementById("increase2").style.display = 'none';
+            document.getElementById("decrease2").style.display = 'none';
+            document.getElementById("textSliderValue").style.display = 'none';
+            document.getElementById("textSliderValue2").style.display = 'none';
+            
+        }
+
+        xhr.open("GET", "/slider?value5="+0, true);
+        xhr.send();
+        
+    });
+    
+    function boton(){
+      var x = document.getElementById("mySelect").value;
+      updateAuto1(x);
+    }
+
+    function boton2(){
+      var x = document.getElementById("mySelect2").value;
+      updateAuto2(x);
+    }
+    
+    function updatePWM(val) {
+      xhr.open("GET", "/slider?value="+val, true);
+      xhr.send();
+    }
+
+    function updatePWM2(val) {
+      xhr.open("GET", "/slider?value2="+val, true);
+      xhr.send();
+    }
+
+    function updateAuto1(val){
+      xhr.open("GET", "/slider?value3="+val, true);
+      xhr.send();
+    }
+    
+    function updateAuto2(val){
+      xhr.open("GET", "/slider?value4="+val, true);
+      xhr.send(); 
+ 
+    }
+    
+     function increaseValue() {
+      var value = parseInt(document.getElementById('textSliderValue').value, 10);
+     if(value<255){
+        value=value+1;
+      }
+      document.getElementById('textSliderValue').value = value;
+      updatePWM(value);
+    }
+    
+    function decreaseValue() {
+      var value = parseInt(document.getElementById('textSliderValue').value, 10);
+      if(value==0){
+        value=0;
+      }else if(value>0){
+        value=value-1;
+      }
+      document.getElementById('textSliderValue').value = value;
+      updatePWM(value);
+    }
+
+    function increaseValue2() {
+      var value = parseInt(document.getElementById('textSliderValue2').value, 10);
+     if(value<255){
+        value=value+1;
+      }
+      document.getElementById('textSliderValue2').value = value;
+      updatePWM2(value);
+    }
+    
+    function decreaseValue2() {
+      var value = parseInt(document.getElementById('textSliderValue2').value, 10);
+      if(value==0){
+        value=0;
+      }else if(value>0){
+        value=value-1;
+      }
+      document.getElementById('textSliderValue2').value = value;
+      updatePWM2(value);
+    }
+    
+    </script>
+    
+  </body>
+</html>
